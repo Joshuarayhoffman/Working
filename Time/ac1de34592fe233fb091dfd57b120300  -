@@ -1,0 +1,22 @@
+Time () {
+
+eval Dial=\($(awk '/\(\) {|\t}|^}/ {print "["NR"]="$1}' $@)\)
+
+	for Turn in ${!Dial[@]}; do
+	
+		[[ ${Dial[$Turn]} != \} ]]\
+		&& Tick=($Turn ${Tick[@]} ${Dial[$Turn]})\
+		&& continue
+	
+	declare -Ag Tock[${Dial[$Tick]}]="$(sed -n ${Tick},${Turn}p $@)"
+	Hand[${Dial[$Tick]}]=$(md5sum <<<${Tock[${Dial[$Tick]}]})
+	Wait=~`tr -sd '[:digit:], ' / <<< ${Tick[@]/#//}`
+	
+		[[ ${Wait}/${Hand[${Dial[$Tick]}]%\ *} ]]\
+		&& mkdir -p $Wait \
+		&& echo "${Tock[${Dial[$Tick]}]}" > "${Wait}/${Hand[${Dial[$Tick]}]}"
+
+	eval Tick[{0,-1}]= && Tick=(${Tick[@]})
+	done
+
+}

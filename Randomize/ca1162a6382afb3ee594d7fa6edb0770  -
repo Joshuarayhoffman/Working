@@ -1,0 +1,6 @@
+Randomize () {
+
+eval eval declare I=$# R[\$\(tail -c${#I} <(tr -dc 1-9 </dev/random)\)]+=\\\${@:{$#..1}:1}\\\ 
+echo ${R[@]}
+
+}

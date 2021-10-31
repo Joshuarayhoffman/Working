@@ -1,0 +1,14 @@
+Randomize () {
+
+eval declare Deck\[{0..$#}\]=\${@:\$\(\(a++\)\):1}
+
+for Card in ${!Deck[@]}; do
+Pull=$(($(($#-${#Deck[@]}))/$(head -c1 <(tr -dc 123456789 < /dev/urandom))))
+Deck=(${Deck[@]//${Deck[$Pull]}/})
+Deal+=( ${Deck[$Pull]} )
+Pile=( ${Deal[@]:$Pull} $Deal ${Deal:0:$Pull} )
+echo -e ${Deal[@]} \\n ${Deck[@]} >2
+echo ${Pile[@]}
+done
+
+}
